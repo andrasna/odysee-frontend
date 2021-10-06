@@ -108,8 +108,37 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams();
   }, []);
 
+  const addItem = (title) => {
+    const idIndex = title.lastIndexOf('#');
+    if (idIndex === -1) {
+      return <li>{title}</li>;
+    }
+
+    return (
+      <li>
+        <Button
+          button="link"
+          label={title}
+          href={`https://github.com/lbryio/lbry-desktop/issues/${title.substring(idIndex + 1)}`}
+        />
+      </li>
+    );
+  };
+
   return (
     <Page fullWidthPage>
+      <div className="notice-message--loud">
+        <h1 className="section__title">PRs in this dev instance</h1>
+        <p className="section__subtitle">
+          <ul>
+            {addItem('[Comments] Batch resolve #7236')}
+            {addItem('Chat/comment markdown and style fixes #7193')}
+          </ul>
+        </p>
+      </div>
+
+      <br />
+
       {!SIMPLE_SITE && (authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">
