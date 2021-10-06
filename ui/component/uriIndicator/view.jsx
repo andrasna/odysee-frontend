@@ -20,6 +20,7 @@ type Props = {
   external?: boolean,
   className?: string,
   focusable: boolean,
+  alreadyResolved: boolean,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -32,9 +33,9 @@ class UriIndicator extends React.PureComponent<Props> {
   }
 
   resolve = (props: Props) => {
-    const { isResolvingUri, resolveUri, claim, uri } = props;
+    const { alreadyResolved, isResolvingUri, resolveUri, claim, uri } = props;
 
-    if (!isResolvingUri && claim === undefined && uri) {
+    if (!alreadyResolved && !isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
   };

@@ -27,6 +27,7 @@ type Props = {
   noOptimization?: boolean,
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
+  alreadyResolved: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -47,9 +48,10 @@ function ChannelThumbnail(props: Props) {
     hideStakedIndicator = false,
     setThumbUploadError,
     ThumbUploadError,
+    alreadyResolved,
   } = props;
   const [thumbLoadError, setThumbLoadError] = React.useState(ThumbUploadError);
-  const shouldResolve = claim === undefined;
+  const shouldResolve = !alreadyResolved && claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const defaultAvatar = AVATAR_DEFAULT || Gerbil;

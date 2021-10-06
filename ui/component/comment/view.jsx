@@ -70,6 +70,7 @@ type Props = {
   supportDisabled: boolean,
   setQuickReply: (any) => void,
   quickReply: any,
+  alreadyResolved: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -109,6 +110,7 @@ function Comment(props: Props) {
     supportDisabled,
     setQuickReply,
     quickReply,
+    alreadyResolved,
   } = props;
 
   const {
@@ -229,9 +231,15 @@ function Comment(props: Props) {
       >
         <div className="comment__thumbnail-wrapper">
           {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="comment__author-thumbnail" />
+            <ChannelThumbnail
+              uri={authorUri}
+              obscure={channelIsBlocked}
+              xsmall
+              className="comment__author-thumbnail"
+              alreadyResolved={alreadyResolved}
+            />
           ) : (
-            <ChannelThumbnail xsmall className="comment__author-thumbnail" />
+            <ChannelThumbnail xsmall className="comment__author-thumbnail" alreadyResolved={alreadyResolved} />
           )}
         </div>
 
@@ -263,6 +271,7 @@ function Comment(props: Props) {
                   })}
                   link
                   uri={authorUri}
+                  alreadyResolved={alreadyResolved}
                 />
               )}
               <Button

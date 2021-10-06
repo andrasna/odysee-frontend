@@ -32,6 +32,7 @@ type Props = {
   allCommentIds: any,
   pinnedComments: Array<Comment>,
   topLevelComments: Array<Comment>,
+  unresolvedCommentChannels: Array<string>,
   topLevelTotalPages: number,
   uri: string,
   claim: ?Claim,
@@ -47,8 +48,9 @@ type Props = {
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
-  fetchReacts: (Array<string>) => Promise<any>,
   commentsAreExpanded?: boolean,
+  fetchReacts: (Array<string>) => Promise<any>,
+  doResolveUris: (Array<string>) => void,
   fetchTopLevelComments: (string, number, number, number) => void,
   fetchComment: (string) => void,
   resetComments: (string) => void,
@@ -60,6 +62,7 @@ function CommentList(props: Props) {
     uri,
     pinnedComments,
     topLevelComments,
+    unresolvedCommentChannels,
     topLevelTotalPages,
     claim,
     claimIsMine,
@@ -74,8 +77,9 @@ function CommentList(props: Props) {
     othersReactsById,
     activeChannelId,
     settingsByChannelId,
-    fetchReacts,
     commentsAreExpanded,
+    fetchReacts,
+    doResolveUris,
     fetchTopLevelComments,
     fetchComment,
     resetComments,
@@ -221,6 +225,11 @@ function CommentList(props: Props) {
     }
   }, [hasDefaultExpansion, isFetchingComments, moreBelow, page, readyToDisplayComments, topLevelTotalPages]);
 
+  // Batch resolve comment channel urls
+  useEffect(() => {
+    if (unresolvedCommentChannels.length > 0) doResolveUris(unresolvedCommentChannels);
+  }, [unresolvedCommentChannels, doResolveUris]);
+
   const getCommentElems = (comments) => {
     return comments.map((comment) => (
       <CommentView
@@ -245,6 +254,7 @@ function CommentList(props: Props) {
         isModerator={comment.is_moderator}
         isGlobalMod={comment.is_global_mod}
         isFiat={comment.is_fiat}
+        alreadyResolved
       />
     ));
   };
